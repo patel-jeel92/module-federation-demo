@@ -1,5 +1,5 @@
 {
-  "name": "atlas-upgrades",
+  "name": "mfe-react-shell",
   "version": "1.0.0",
   "description": "Upgrade shell with navigation to load micro front ends with module federation",
   "main": "index.js",
@@ -51,6 +51,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "zustand": "^3.7.1"
   }
 }

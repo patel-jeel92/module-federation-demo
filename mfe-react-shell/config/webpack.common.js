@@ -20,11 +20,12 @@ module.exports = {
   plugins: [
     // Module Federation to load different micro apps
     new ModuleFederationPlugin({
-      name: "SHELL",
+      name: "mfe-react-shell",
       filename: "remoteEntry.js",
       remotes: {
         PRODUCT: "PRODUCT@http://localhost:3002/remoteEntry.js",
         USER: "USER@http://localhost:3003/remoteEntry.js",
+        ANGULAR: "remote1@http://localhost:3001/remoteEntry.js",
       },
       shared: [
         {
@@ -57,7 +58,7 @@ module.exports = {
     // Generates an HTML file from a template
     // Generates deprecation warning: https://github.com/jantimon/html-webpack-plugin/issues/1501
     new HtmlWebpackPlugin({
-      title: "ATLAS Upgrades shell",
+      title: "MFE React shell",
       favicon: paths.src + "/assets/icons/favicon.png",
       template: paths.public + "/index.html", // template file
       filename: "index.html", // output file

@@ -1,29 +1,32 @@
-import { NavLink, useHistory } from "react-router-dom";
-import React, { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
+import Stepper from "@mui/material/Stepper";
+import React, { useEffect, useRef, useState } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 // eslint-disable-next-line import/no-unresolved
 const ProductApp = React.lazy(() => import("PRODUCT/App"));
 // eslint-disable-next-line import/no-unresolved
 const UserApp = React.lazy(() => import("USER/App"));
+
+// eslint-disable-next-line import/no-unresolved
+const AngularApp = React.lazy(() => import("ANGULAR/StaticAngularComponent"));
 
 export default function HorizontalNonLinearStepper() {
   let history = useHistory();
   // eslint-disable-next-line react/prop-types
   const routes = [
     {
-      name: "Catalog",
-      path: "/catalog",
+      name: "One",
+      path: "/one",
     },
     {
-      name: "Product",
-      path: "/product",
+      name: "Two",
+      path: "/two",
     },
     {
-      name: "User",
-      path: "/user",
+      name: "Three",
+      path: "/three",
     },
   ];
   const [activeStep, setActiveStep] = useState(0);
@@ -59,9 +62,11 @@ export default function HorizontalNonLinearStepper() {
     const step = stateRef.current;
     switch (step) {
       case 0:
-        return `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`;
+        return (
+          <React.Suspense fallback="Loading...">
+            <AngularApp />
+          </React.Suspense>
+        );
       case 1:
         return (
           <React.Suspense fallback="Loading...">

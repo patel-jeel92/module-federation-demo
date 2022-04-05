@@ -1,9 +1,9 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
-const deps = require('./package.json').dependencies;
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const deps = require("./package.json").dependencies;
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   devServer: {
     port: 3002,
   },
@@ -12,12 +12,9 @@ module.exports = {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: {
-          presets: [
-            '@babel/preset-env',
-            '@babel/preset-react',
-          ],
+          presets: ["@babel/preset-env", "@babel/preset-react"],
         },
       },
       {
@@ -27,28 +24,25 @@ module.exports = {
     ],
   },
   plugins: [
-    new ModuleFederationPlugin(
-      {
-        name: 'PRODUCT',
-        filename: 'remoteEntry.js',
-        exposes: {
-          './App': './src/App',
-        },
-        shared: [
-          {
-            ...deps,
-            react: { requiredVersion: deps.react, singleton: true },
-            'react-dom': {
-              requiredVersion: deps['react-dom'],
-              singleton: true,
-            },
+    new ModuleFederationPlugin({
+      name: "product",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./App": "./src/App",
+      },
+      shared: [
+        {
+          ...deps,
+          react: { requiredVersion: deps.react, singleton: true },
+          "react-dom": {
+            requiredVersion: deps["react-dom"],
+            singleton: true,
           },
-        ],
-      }
-    ),
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
-      template:
-        './public/index.html',
+      template: "./public/index.html",
     }),
   ],
 };

@@ -5,7 +5,7 @@ const deps = require("./package.json").dependencies;
 module.exports = {
   mode: "development",
   devServer: {
-    port: 3002,
+    port: 3006,
   },
   module: {
     rules: [

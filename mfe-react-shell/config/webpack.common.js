@@ -23,9 +23,8 @@ module.exports = {
       name: "mfe-react-shell",
       filename: "remoteEntry.js",
       remotes: {
-        PRODUCT: "PRODUCT@http://localhost:3002/remoteEntry.js",
-        USER: "USER@http://localhost:3003/remoteEntry.js",
-        ANGULAR: "remote1@http://localhost:3001/remoteEntry.js",
+        USER: "USER@http://localhost:3005/remoteEntry.js",
+        PRODUCT: "PRODUCT@http://localhost:3006/remoteEntry.js",
       },
       shared: [
         {

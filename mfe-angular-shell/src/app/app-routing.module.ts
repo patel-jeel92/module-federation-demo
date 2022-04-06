@@ -7,26 +7,26 @@ const routes: Routes = [
     path: 'angular',
     loadChildren: () =>
       loadRemoteModule({
-        remoteEntry: 'http://localhost:3001/remoteEntry.js',
-        remoteName: 'remote1',
+        type: 'module',
+        remoteEntry: 'http://localhost:3007/remoteEntry.js',
         exposedModule: './ParentModule',
       }).then((m) => m.ParentModule),
   },
   {
-    path: 'products',
+    path: 'product',
     loadChildren: () =>
       loadRemoteModule({
-        remoteEntry: 'http://localhost:3002/remoteEntry.js',
-        remoteName: 'product',
+        type: 'module',
+        remoteEntry: 'http://localhost:3006/remoteEntry.js',
         exposedModule: './App',
       }).then((m) => m.App),
   },
   {
-    path: 'users',
+    path: 'user',
     loadChildren: () =>
       loadRemoteModule({
-        remoteEntry: 'http://localhost:3003/remoteEntry.js',
-        remoteName: 'user',
+        type: 'module',
+        remoteEntry: 'http://localhost:3005/remoteEntry.js',
         exposedModule: './App',
       }).then((m) => m.App),
   },

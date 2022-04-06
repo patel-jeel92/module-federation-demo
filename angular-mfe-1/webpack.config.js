@@ -10,10 +10,11 @@ sharedMappings.register(path.join(__dirname, "tsconfig.json"), [
 module.exports = {
   output: {
     uniqueName: "angular-mfe-1",
-    publicPath: "auto",
+    publicPath: "http://localhost:3007/",
+    scriptType: "text/javascript",
   },
-  optimization: {
-    runtimeChunk: false,
+  experiments: {
+    outputModule: true,
   },
   resolve: {
     alias: {
@@ -25,20 +26,7 @@ module.exports = {
       name: "remote1",
       filename: "remoteEntry.js",
       exposes: {
-        "./AngularTileComponent":
-          ".//src/app/angular-tile/angular-tile.component.ts",
-        "./StaticAngularComponent":
-          ".//src/app/static-angular/static-angular.component.ts",
-        "./ParentModule": ".//src/app/parent/parent.module.ts",
-      },
-      shared: {
-        "@angular/core": { singleton: true, strictVersion: true },
-        "@angular/common": { singleton: true, strictVersion: true },
-        "@angular/common/http": { singleton: true, strictVersion: true },
-        "@angular/router": { singleton: true, strictVersion: true },
-        bootstrap: { singleton: true, strictVersion: true },
-        jquery: { singleton: true, strictVersion: true },
-        ...sharedMappings.getDescriptors(),
+        "./ParentModule": "./src/app/parent/parent.module.ts",
       },
     }),
     sharedMappings.getPlugin(),

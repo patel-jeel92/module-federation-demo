@@ -11,7 +11,7 @@ sharedMappings.register(path.join(__dirname, "tsconfig.json"), [
 module.exports = {
   output: {
     uniqueName: "mfeAngularShell",
-    publicPath: "auto",
+    publicPath: "http://localhost:8081/",
   },
   optimization: {
     runtimeChunk: false,
@@ -36,11 +36,7 @@ module.exports = {
       // },
 
       // For hosts (please adjust)
-      remotes: {
-        // PRODUCT: "PRODUCT@http://localhost:3002/remoteEntry.js",
-        // USER: "USER@http://localhost:3003/remoteEntry.js",
-        // ANGULAR: "remote1@http://localhost:3001/remoteEntry.js",
-      },
+      remotes: {},
 
       shared: share({
         "@angular/core": {

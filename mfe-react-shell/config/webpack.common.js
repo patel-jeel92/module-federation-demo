@@ -13,7 +13,6 @@ module.exports = {
   output: {
     path: paths.build,
     filename: "[name].bundle.js",
-    publicPath: "/",
   },
 
   // Customize the webpack build process
@@ -23,8 +22,9 @@ module.exports = {
       name: "mfe-react-shell",
       filename: "remoteEntry.js",
       remotes: {
-        USER: "USER@http://localhost:3005/remoteEntry.js",
-        PRODUCT: "PRODUCT@http://localhost:3006/remoteEntry.js",
+        USER: "user@http://localhost:3005/remoteEntry.js",
+        PRODUCT: "product@http://localhost:3006/remoteEntry.js",
+        ANGULAR: "remote1@http://localhost:3007/remoteEntry.js",
       },
       shared: [
         {

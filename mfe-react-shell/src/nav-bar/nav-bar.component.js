@@ -10,7 +10,7 @@ const ProductApp = React.lazy(() => import("PRODUCT/App"));
 const UserApp = React.lazy(() => import("USER/App"));
 
 // eslint-disable-next-line import/no-unresolved
-const AngularApp = React.lazy(() => import("ANGULAR/StaticAngularComponent"));
+const AngularApp = React.lazy(() => import("ANGULAR/ParentModule"));
 
 export default function HorizontalNonLinearStepper() {
   let history = useHistory();

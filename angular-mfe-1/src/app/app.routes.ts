@@ -6,8 +6,7 @@ export const APP_ROUTES: Routes = [
   { path: '', redirectTo: 'parent', pathMatch: 'full' },
   {
     path: 'parent',
-    loadChildren: () =>
-      import('./parent/parent.module').then((m) => m.ParentModule),
+    loadChildren: () => import('./parent/parent.module').then((m) => m.default),
   },
   { path: 'angular-tile', component: AngularTileComponent, pathMatch: 'full' },
   {

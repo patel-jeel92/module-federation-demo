@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AngularTileModule } from './angular-tile/angular-tile.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
-import { ParentModule } from './parent/parent.module';
+import ParentModule from './parent/parent.module';
 import StaticAngularComponent from './static-angular/static-angular.component';
 
 @NgModule({

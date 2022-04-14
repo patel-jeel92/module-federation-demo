@@ -1,34 +1,68 @@
-import { loadRemoteModule } from '@angular-architects/module-federation';
+import {
+  WebComponentWrapper,
+  WebComponentWrapperOptions,
+} from '@angular-architects/module-federation-tools';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
-    path: 'angular',
-    loadChildren: () =>
-      loadRemoteModule({
-        type: 'module',
-        remoteEntry: 'http://localhost:3007/remoteEntry.js',
-        exposedModule: './ParentModule',
-      }).then((m) => m.ParentModule),
-  },
-  {
-    path: 'product',
-    loadChildren: () =>
-      loadRemoteModule({
-        type: 'module',
-        remoteEntry: 'http://localhost:3006/remoteEntry.js',
-        exposedModule: './App',
-      }).then((m) => m.App),
-  },
+  // Your route here:
+
+  // Local usage
+  // {
+  //   path: 'flights',
+  //   loadChildren: () => {
+  //     return loadRemoteModule({
+  //       remoteEntry: URL,
+  //       remoteName: 'mfe1',
+  //       exposedModule: './Module'
+  //     })
+  //     .then(m => m.FlightsModule) }
+  // },
+
+  // {
+  //   path: 'flights',
+  //   loadChildren: () => {
+  //     return loadRemoteModule({
+  //       remoteEntry:
+  //         'https://brave-glacier-0ffc18c10.azurestaticapps.net/remoteEntry.js',
+  //       remoteName: 'mfe1',
+  //       exposedModule: './Module',
+  //     }).then((m) => m.FlightsModule);
+  //   },
+  // },
+
   {
     path: 'user',
-    loadChildren: () =>
-      loadRemoteModule({
-        type: 'module',
-        remoteEntry: 'http://localhost:3005/remoteEntry.js',
-        exposedModule: './App',
-      }).then((m) => m.App),
+    component: WebComponentWrapper,
+    data: {
+      remoteEntry: 'http://localhost:3005/remoteEntry.js',
+      remoteName: 'user',
+      exposedModule: './web-components',
+      elementName: 'react-element',
+    } as WebComponentWrapperOptions,
+  },
+
+  {
+    path: 'cart',
+    component: WebComponentWrapper,
+    data: {
+      remoteEntry: 'http://localhost:8080/remoteEntry.js',
+      remoteName: 'cart',
+      exposedModule: './web-components',
+      elementName: 'cart-element',
+    } as WebComponentWrapperOptions,
+  },
+
+  {
+    path: 'angular',
+    component: WebComponentWrapper,
+    data: {
+      remoteEntry: 'http://localhost:4202/remoteEntry.js',
+      remoteName: 'angular1',
+      exposedModule: './web-components',
+      elementName: 'angular1-element',
+    } as WebComponentWrapperOptions,
   },
 ];
 

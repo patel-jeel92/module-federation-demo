@@ -11,7 +11,7 @@ sharedMappings.register(path.join(__dirname, "tsconfig.json"), [
 module.exports = {
   output: {
     uniqueName: "mfeAngularShell",
-    publicPath: "http://localhost:8081/",
+    publicPath: "auto",
   },
   optimization: {
     runtimeChunk: false,
@@ -21,20 +21,8 @@ module.exports = {
       ...sharedMappings.getAliases(),
     },
   },
-  experiments: {
-    outputModule: true,
-  },
   plugins: [
     new ModuleFederationPlugin({
-      library: { type: "module" },
-
-      // For remotes (please adjust)
-      // name: "mfeAngularShell",
-      // filename: "remoteEntry.js",
-      // exposes: {
-      //     './Component': './/src/app/app.component.ts',
-      // },
-
       // For hosts (please adjust)
       remotes: {},
 

@@ -2,10 +2,31 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-export class Mfe4Element extends HTMLElement {
+class ReactElement extends HTMLElement {
   connectedCallback() {
-    ReactDOM.render(<App />, this);
+    // Create a ShadowDOM
+    const root = this.attachShadow({ mode: "open" });
+
+    // Create a mount element
+    const mountPoint = document.createElement("div");
+
+    root.appendChild(mountPoint);
+
+    // You can directly use shadow root as a mount point
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      this
+    );
   }
 }
 
-customElements.define("react-element", Mfe4Element);
+customElements.define("react-element", ReactElement);
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);

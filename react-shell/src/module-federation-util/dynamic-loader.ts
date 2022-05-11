@@ -38,6 +38,7 @@ export function lookupExposedModule2(options: LoadRemoteModuleOptions) {
     options.type === "script"
       ? (key = options.remoteName)
       : (key = options.remoteEntry);
+
     await loadRemoteModule2(options);
 
     const container = containerMap[key];

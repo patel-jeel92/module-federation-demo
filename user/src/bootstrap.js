@@ -17,7 +17,7 @@ class ReactElement extends HTMLElement {
       <React.StrictMode>
         <App />
       </React.StrictMode>,
-      this
+      mountPoint
     );
   }
 }

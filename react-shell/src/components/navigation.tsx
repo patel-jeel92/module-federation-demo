@@ -4,16 +4,15 @@ import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import routes from "../configs/routes.json";
+import { IRoute, Routes } from "../configs/routes";
 import { ISystem } from "../interfaces/ISystem";
 import WrapperComponent from "./WrapperComponent";
 
 export default function HorizontalNonLinearStepper() {
   const history = useHistory();
-  const initial = routes[0];
+  const [routes] = useState<IRoute[]>(Routes);
   const [activeStep, setActiveStep] = useState(0);
-  const [count, setCount] = useState(0);
-  const [system, setSystem] = React.useState<ISystem>(initial as ISystem);
+  const [system, setSystem] = React.useState<ISystem>({} as ISystem);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [completed, setCompleted] = useState({});
@@ -21,24 +20,26 @@ export default function HorizontalNonLinearStepper() {
   stateRef.current = activeStep;
 
   useEffect(() => {
-    // subscribe event
-    window.addEventListener("back", handleBack);
-    window.addEventListener("save-and-complete", handleComplete);
+    const initial = routes[0];
+    setSystem(initial);
+
+    addEventListener("save-and-complete", () => handleComplete());
     return () => {
       // unsubscribe event
-      window.removeEventListener("back", handleBack);
-      window.removeEventListener("save-and-complete", handleComplete);
+      removeEventListener("save-and-complete", () => handleComplete());
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Whenever count changes (handle back and handle next) navigate to either prev or next state depending on the activeStep
+  // // Whenever count changes (handle back and handle next) navigate to either prev or next state depending on the activeStep
   useEffect(() => {
     const nextState = routes[activeStep];
     if (nextState) {
+      setSystem(nextState);
       history.push(nextState.path);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
+  }, [stateRef.current]);
 
   const totalSteps = () => {
     return routes.length;
@@ -61,28 +62,14 @@ export default function HorizontalNonLinearStepper() {
       isLastStep() && !allStepsCompleted()
         ? // It's the last step, but not all steps have been completed,
           // find the first step that has been completed
-          routes.findIndex((step, i) => !(i in completed))
+          routes.findIndex((step, i): boolean => !(i in completed))
         : stateRef.current + 1;
 
     setActiveStep(newActiveStep);
-    setCount((prevCount) => prevCount + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    setCount((prevCount) => prevCount - 1);
   };
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
-    const item = routes[step];
-    console.log("ITEM", item);
-    setSystem({
-      remoteEntry: item.remoteEntry,
-      remoteName: item.remoteName,
-      exposedModule: item.exposedModule,
-      type: item.type,
-    });
   };
 
   const handleComplete = () => {
@@ -92,29 +79,44 @@ export default function HorizontalNonLinearStepper() {
     handleNext();
   };
 
-  //   const handleReset = () => {
-  //     setActiveStep(0);
-  //     setCompleted({});
-  //   };
-
   return (
-    <Box sx={{ width: "100%" }}>
-      <Stepper nonLinear activeStep={activeStep}>
+    <Box>
+      <h2 className="pl-4">{routes[activeStep].name}</h2>
+      <Stepper nonLinear activeStep={activeStep} alternativeLabel>
         {routes.map((label, index) => (
           <Step key={label.name} completed={completed[index]}>
-            <NavLink
-              to={label.path.toLowerCase().replace(/\s/g, "")}
-              style={{ textDecoration: "none" }}
-            >
-              <StepButton color="inherit" onClick={handleStep(index)}>
+            <NavLink to={label.path.toLowerCase().replace(/\s/g, "")}>
+              <StepButton
+                sx={{
+                  "& .MuiStepLabel-root .Mui-completed": {
+                    color: "#09B119", // circle color (COMPLETED)
+                  },
+                  "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                    {
+                      color: "black", // Just text label (COMPLETED)
+                    },
+                  "& .MuiStepLabel-root .Mui-active": {
+                    color: "#E20074", // circle color (ACTIVE)
+                  },
+                  "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                    {
+                      color: "black", // Just text label (COMPLETED)
+                    },
+                  "& .MuiStepButton-root": {
+                    outline: "none",
+                    "box-shadow": "none",
+                  },
+                }}
+                onClick={handleStep(index)}
+              >
                 {label.name}
               </StepButton>
             </NavLink>
           </Step>
         ))}
       </Stepper>
-      <div>
-        <WrapperComponent system={system}> </WrapperComponent>
+      <div className="content">
+        <WrapperComponent system={system} />
       </div>
     </Box>
   );

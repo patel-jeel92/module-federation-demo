@@ -23,13 +23,14 @@ export async function lookupExposedModule<T>(
   exposedModule: string
 ): Promise<T> {
   const container = containerMap[key];
-  console.log("looked up container", container);
   const factory = await container.get(exposedModule);
   const Module = factory();
   return Module as T;
 }
 
-export function lookupExposedModule2(options: LoadRemoteModuleOptions) {
+export function loadAndLookupExposedModule<T = any>(
+  options: LoadRemoteModuleOptions
+) {
   return async () => {
     let key = "";
     if (!options.type) {
@@ -38,30 +39,24 @@ export function lookupExposedModule2(options: LoadRemoteModuleOptions) {
     options.type === "script"
       ? (key = options.remoteName)
       : (key = options.remoteEntry);
-
-    await loadRemoteModule2(options);
+    await loadRemoteModule(options);
 
     const container = containerMap[key];
-    console.log("looked up container", container);
     const factory = await container.get(options.exposedModule);
     const Module = factory();
-    return Module;
+    return Module as T;
   };
 }
 
 async function initRemote(container: Container, key: any) {
-  console.log("container", container);
   // Do we still need to initialize the remote?
   if (remoteMap[key]) {
-    console.log("Remote Map", remoteMap);
-    console.log("returning container", remoteMap[key]);
     return container;
   }
 
   // Do we still need to initialize the share scope?
   if (!isDefaultScopeInitialized) {
     await __webpack_init_sharing__("default");
-    console.log("initialized default scope");
     isDefaultScopeInitialized = true;
   }
 
@@ -101,11 +96,9 @@ export async function loadRemoteEntry(
     const remoteEntry = remoteEntryOrOptions;
     return await loadRemoteScriptEntry(remoteEntry, remoteName || "");
   } else if (remoteEntryOrOptions?.type === "script") {
-    console.log("loading script......");
     const options = remoteEntryOrOptions;
     return await loadRemoteScriptEntry(options.remoteEntry, options.remoteName);
   } else if (remoteEntryOrOptions?.type === "module") {
-    console.log("loading module......");
     const options = remoteEntryOrOptions;
     await loadRemoteModuleEntry(options.remoteEntry);
   }
@@ -117,10 +110,6 @@ async function loadRemoteModuleEntry(remoteEntry: string): Promise<void> {
   }
   return await import(/* webpackIgnore:true */ remoteEntry).then(
     (container) => {
-      console.log(
-        "in then on loading Remote module. The container is",
-        container
-      );
       initRemote(container, remoteEntry);
       containerMap[remoteEntry] = container;
     }
@@ -147,11 +136,8 @@ async function loadRemoteScriptEntry(
 
     script.onload = async () => {
       const container = window[remoteName];
-      console.log("container", container);
       await initRemote(container, remoteName);
-      console.log("initialized remote");
       containerMap[remoteName] = container;
-      console.log("added to container map");
       resolve();
     };
 
@@ -177,7 +163,7 @@ export type LoadRemoteModuleEsmOptions = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function loadRemoteModule<T = any>(
+export async function loadAndReturnRemoteModule<T = any>(
   options: LoadRemoteModuleOptions
 ) {
   let loadRemoteEntryOptions: LoadRemoteEntryOptions;
@@ -204,14 +190,13 @@ export async function loadRemoteModule<T = any>(
   }
 
   if (options.remoteEntry) {
-    console.log("remote entry options", loadRemoteEntryOptions);
     await loadRemoteEntry(loadRemoteEntryOptions);
   }
 
   return await lookupExposedModule<T>(key, options.exposedModule);
 }
 
-export async function loadRemoteModule2(options: LoadRemoteModuleOptions) {
+export async function loadRemoteModule(options: LoadRemoteModuleOptions) {
   let loadRemoteEntryOptions: LoadRemoteEntryOptions;
   if (options.type === "script") {
     loadRemoteEntryOptions = {
@@ -227,7 +212,6 @@ export async function loadRemoteModule2(options: LoadRemoteModuleOptions) {
   }
 
   if (options.remoteEntry) {
-    console.log("remote entry options", loadRemoteEntryOptions);
     await loadRemoteEntry(loadRemoteEntryOptions);
   }
 }

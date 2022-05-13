@@ -2,15 +2,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FunctionComponent } from "react";
 import { ISystem } from "../interfaces/ISystem";
-import { lookupExposedModule2 } from "../module-federation-util/dynamic-loader";
+import { loadAndLookupExposedModule } from "../module-federation-util/dynamic-loader";
+import ErrorBoundary from "./ErrorBoundary";
 
 interface IWrapperComponent {
   system: ISystem;
 }
 
 const WrapperComponent: FunctionComponent<IWrapperComponent> = ({ system }) => {
-  const Component2 = React.lazy(
-    lookupExposedModule2({
+  const Component = React.lazy(
+    loadAndLookupExposedModule({
       type: system.type,
       remoteEntry: system.remoteEntry,
       remoteName: system.remoteName,
@@ -19,11 +20,11 @@ const WrapperComponent: FunctionComponent<IWrapperComponent> = ({ system }) => {
   );
 
   return (
-    <>
+    <ErrorBoundary>
       <React.Suspense fallback="Loading System">
-        <Component2 />
+        <Component />
       </React.Suspense>
-    </>
+    </ErrorBoundary>
   );
 };
 
